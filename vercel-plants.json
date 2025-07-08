@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/plants/$1" }
+  ],
+  "buildCommand": "cd plants && npm install && npm run build",
+  "outputDirectory": "plants/dist"
+} 

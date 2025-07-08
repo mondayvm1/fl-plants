@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Florida Zone 10 Plant Helper - Enhanced Version</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'florida-green': '#2D5016',
+                        'florida-blue': '#0066CC',
+                        'florida-orange': '#FF8C00',
+                        'florida-yellow': '#FFD700',
+                        'florida-pink': '#FF69B4',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .btn-primary {
+            @apply bg-florida-green hover:bg-green-800 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+        }
+        .btn-secondary {
+            @apply bg-florida-blue hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+        }
+        .card {
+            @apply bg-white rounded-lg shadow-md p-6 border border-gray-200;
+        }
+        .input-field {
+            @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-florida-green focus:border-transparent;
+        }
+        .nav-link {
+            @apply px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 text-gray-700 hover:bg-green-100 hover:text-florida-green;
+        }
+        .nav-link.active {
+            @apply bg-florida-green text-white;
+        }
+        .season-btn {
+            @apply p-4 rounded-lg border-2 transition-colors border-gray-200 hover:border-gray-300;
+        }
+        .season-btn.active {
+            @apply border-florida-green bg-green-50 text-florida-green;
+        }
+        .calendar-day {
+            @apply p-2 border border-gray-200 min-h-[100px] cursor-pointer hover:bg-gray-50;
+        }
+        .calendar-day.selected {
+            @apply bg-blue-50 border-blue-300;
+        }
+        .calendar-day.today {
+            @apply bg-florida-green text-white font-bold;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg border-b-4 border-florida-green">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-2">
+                    <span class="text-2xl">🌱</span>
+                    <span class="text-xl font-bold text-florida-green">
+                        Florida Zone 10 Plant Helper
+                    </span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <button onclick="showSection('home')" class="nav-link active">Home</button>
+                    <button onclick="showSection('identify')" class="nav-link">Plant ID</button>
+                    <button onclick="showSection('planner')" class="nav-link">Garden Planner</button>
+                    <button onclick="showSection('database')" class="nav-link">Plant Database</button>
+                    <button onclick="showSection('calendar')" class="nav-link">Calendar</button>
+                    <button onclick="showSection('guide')" class="nav-link">Zone 10 Guide</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8">
+        <!-- Home Section -->
+        <div id="home" class="section active">
+            <div class="text-center py-12">
+                <h1 class="text-4xl md:text-6xl font-bold text-florida-green mb-4">
+                    Welcome to Florida Zone 10
+                </h1>
+                <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+                    Your comprehensive guide to gardening in Florida's tropical climate. 
+                    Identify plants, plan your garden, and grow successfully in Zone 10.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <button onclick="showSection('identify')" class="btn-primary text-lg px-8 py-3">
+                        Start Identifying Plants
+                    </button>
+                    <button onclick="showSection('calendar')" class="btn-secondary text-lg px-8 py-3">
+                        View Planting Calendar
+                    </button>
+                </div>
+            </div>
+
+            <div class="card max-w-4xl mx-auto mb-8">
+                <h2 class="text-2xl font-bold text-florida-green mb-6 text-center">
+                    Zone 10 Climate Characteristics
+                </h2>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="text-center p-4">
+                        <div class="text-4xl mb-3">☀️</div>
+                        <h3 class="font-semibold text-gray-800 mb-2">Sun Exposure</h3>
+                        <p class="text-gray-600">Full sun to partial shade</p>
+                    </div>
+                    <div class="text-center p-4">
+                        <div class="text-4xl mb-3">🌡️</div>
+                        <h3 class="font-semibold text-gray-800 mb-2">Temperature Range</h3>
+                        <p class="text-gray-600">30°F - 40°F minimum</p>
+                    </div>
+                    <div class="text-center p-4">
+                        <div class="text-4xl mb-3">🌧️</div>
+                        <h3 class="font-semibold text-gray-800 mb-2">Rainfall</h3>
+                        <p class="text-gray-600">50-60 inches annually</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="card hover:shadow-lg transition-shadow duration-300 cursor-pointer" onclick="showSection('identify')">
+                    <div class="bg-florida-green p-3 rounded-lg w-fit mb-4">🔍</div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Plant Identification</h3>
+                    <p class="text-gray-600">Identify plants by uploading photos or describing their characteristics</p>
+                </div>
+                <div class="card hover:shadow-lg transition-shadow duration-300 cursor-pointer" onclick="showSection('planner')">
+                    <div class="bg-florida-blue p-3 rounded-lg w-fit mb-4">📅</div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Garden Planner</h3>
+                    <p class="text-gray-600">Plan your Zone 10 garden with seasonal planting guides</p>
+                </div>
+                <div class="card hover:shadow-lg transition-shadow duration-300 cursor-pointer" onclick="showSection('database')">
+                    <div class="bg-florida-orange p-3 rounded-lg w-fit mb-4">📚</div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Plant Database</h3>
+                    <p class="text-gray-600">Browse our comprehensive database of Zone 10 plants</p>
+                </div>
+                <div class="card hover:shadow-lg transition-shadow duration-300 cursor-pointer" onclick="showSection('calendar')">
+                    <div class="bg-florida-pink p-3 rounded-lg w-fit mb-4">🌙</div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Moon Calendar</h3>
+                    <p class="text-gray-600">Planting calendar with moon phases and almanac wisdom</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Plant Identifier Section -->
+        <div id="identify" class="section hidden">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-florida-green mb-4">Plant Identifier</h1>
+                <p class="text-gray-600">Identify plants by uploading a photo or describing their characteristics</p>
+            </div>
+
+            <div class="card max-w-2xl mx-auto">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Upload Plant Photo</h2>
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                    <div class="text-4xl mb-4">📷</div>
+                    <p class="text-gray-600 mb-4">Click to upload your plant photo</p>
+                    <input type="file" accept="image/*" id="photo-upload" class="hidden">
+                    <label for="photo-upload" class="btn-primary cursor-pointer inline-block">
+                        Choose Photo
+                    </label>
+                </div>
+                
+                <div class="mt-6 text-center">
+                    <button onclick="identifyPlant()" class="btn-primary text-lg px-8 py-3">
+                        🔍 Identify Plant
+                    </button>
+                </div>
+            </div>
+
+            <div id="results" class="card max-w-2xl mx-auto mt-8 hidden">
+                <h2 class="text-xl font-semibold text-gray-800 mb-6">Identification Results</h2>
+                <div id="results-content"></div>
+            </div>
+        </div>
+
+        <!-- Garden Planner Section -->
+        <div id="planner" class="section hidden">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-florida-green mb-4">Zone 10 Garden Planner</h1>
+                <p class="text-gray-600">Plan your garden with seasonal planting guides and tips for Florida Zone 10</p>
+            </div>
+
+            <div class="card">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Select Season</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button onclick="showSeason('spring')" class="season-btn active">🌱 Spring</button>
+                    <button onclick="showSeason('summer')" class="season-btn">☀️ Summer</button>
+                    <button onclick="showSeason('fall')" class="season-btn">🍂 Fall</button>
+                    <button onclick="showSeason('winter')" class="season-btn">❄️ Winter</button>
+                </div>
+            </div>
+
+            <div id="season-content" class="card mt-6">
+                <div id="spring-content" class="season-content active">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">🌱 Spring Planting Guide</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-2">Vegetables to Plant:</h4>
+                            <ul class="text-gray-600 space-y-1">
+                                <li>• Tomatoes</li>
+                                <li>• Peppers</li>
+                                <li>• Cucumbers</li>
+                                <li>• Squash</li>
+                                <li>• Beans</li>
+                                <li>• Corn</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-2">Flowers to Plant:</h4>
+                            <ul class="text-gray-600 space-y-1">
+                                <li>• Marigolds</li>
+                                <li>• Zinnias</li>
+                                <li>• Sunflowers</li>
+                                <li>• Cosmos</li>
+                                <li>• Petunias</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Moon Phase Tips -->
+            <div class="card mt-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">🌙 Moon Phase Gardening Tips</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-semibold text-gray-700 mb-2">Waxing Moon (New to Full)</h4>
+                        <ul class="space-y-1 text-gray-600">
+                            <li>• Plant above-ground crops</li>
+                            <li>• Apply foliar fertilizers</li>
+                            <li>• Harvest for immediate use</li>
+                            <li>• Graft trees and shrubs</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-700 mb-2">Waning Moon (Full to New)</h4>
+                        <ul class="space-y-1 text-gray-600">
+                            <li>• Plant root crops and bulbs</li>
+                            <li>• Prune and weed</li>
+                            <li>• Harvest for storage</li>
+                            <li>• Control pests</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Plant Database Section -->
+        <div id="database" class="section hidden">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-florida-green mb-4">Zone 10 Plant Database</h1>
+                <p class="text-gray-600">Browse our comprehensive collection of plants that thrive in Florida Zone 10</p>
+            </div>
+
+            <div class="card mb-6">
+                <div class="flex flex-col md:flex-row gap-4">
+                    <div class="flex-1">
+                        <input type="text" placeholder="Search plants..." class="input-field" id="search-input" onkeyup="filterPlants()">
+                    </div>
+                    <select class="input-field md:w-48" id="category-filter" onchange="filterPlants()">
+                        <option value="">All Categories</option>
+                        <option value="vegetables">Vegetables</option>
+                        <option value="flowers">Flowers</option>
+                        <option value="herbs">Herbs</option>
+                        <option value="fruits">Fruits</option>
+                        <option value="shrubs">Shrubs</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="plants-grid">
+                <!-- Plants will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Calendar Section -->
+        <div id="calendar" class="section hidden">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-florida-green mb-4">Planting Calendar</h1>
+                <p class="text-gray-600">Moon phases, sun calendar, and farming almanac wisdom for Zone 10</p>
+            </div>
+
+            <!-- Calendar View Tabs -->
+            <div class="flex flex-wrap gap-2 mb-6">
+                <button onclick="showCalendarView('calendar')" class="calendar-tab active">📅 Calendar</button>
+                <button onclick="showCalendarView('moon')" class="calendar-tab">🌙 Moon Phases</button>
+                <button onclick="showCalendarView('sun')" class="calendar-tab">☀️ Sun Calendar</button>
+                <button onclick="showCalendarView('almanac')" class="calendar-tab">📖 Almanac Tips</button>
+            </div>
+
+            <!-- Calendar Grid -->
+            <div id="calendar-view" class="card">
+                <div class="flex items-center justify-between mb-6">
+                    <button onclick="navigateMonth('prev')" class="p-2 rounded-lg hover:bg-gray-100">←</button>
+                    <h2 class="text-2xl font-bold text-florida-green" id="calendar-title"></h2>
+                    <button onclick="navigateMonth('next')" class="p-2 rounded-lg hover:bg-gray-100">→</button>
+                </div>
+                <div class="grid grid-cols-7 gap-1 mb-6">
+                    <div class="p-2 text-center font-semibold text-gray-700 bg-gray-100">Sun</div>
+                    <div class="p-2 text-center font-semibold text-gray-700 bg-gray-100">Mon</div>
+                    <div class="p-2 text-center font-semibold text-gray-700 bg-gray-100">Tue</div>
+                    <div class="p-2 text-center font-semibold text-gray-700 bg-gray-100">Wed</div>
+                    <div class="p-2 text-center font-semibold text-gray-700 bg-gray-100">Thu</div>
+                    <div class="p-2 text-center font-semibold text-gray-700 bg-gray-100">Fri</div>
+                    <div class="p-2 text-center font-semibold text-gray-700 bg-gray-100">Sat</div>
+                    <div id="calendar-days"></div>
+                </div>
+                <div id="selected-date-info" class="border-t pt-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4" id="selected-date-title"></h3>
+                    <div id="selected-date-content"></div>
+                </div>
+            </div>
+
+            <!-- Moon Phases View -->
+            <div id="moon-view" class="section hidden">
+                <div class="space-y-4">
+                    <div class="card bg-purple-50 border-purple-200">
+                        <h4 class="font-semibold text-purple-800 mb-2">Current Moon Phase</h4>
+                        <div class="flex items-center space-x-3 mb-2">
+                            <span class="text-2xl">🌙</span>
+                            <span class="font-semibold">Waning Gibbous</span>
+                            <span class="text-sm text-gray-500" id="current-date"></span>
+                        </div>
+                        <p class="text-gray-600 mb-2">Moon is decreasing in illumination</p>
+                        <p class="text-sm bg-purple-100 p-2 rounded">
+                            <strong>Today's Tip:</strong> Good time for pruning, weeding, and pest control. Avoid planting above-ground crops.
+                        </p>
+                    </div>
+                    <div class="card">
+                        <div class="flex items-center space-x-3 mb-2">
+                            <span class="text-2xl">🌙</span>
+                            <span class="font-semibold">Last Quarter</span>
+                            <span class="text-sm text-gray-500">Jan 8, 2024</span>
+                        </div>
+                        <p class="text-gray-600 mb-2">Half moon visible in the morning</p>
+                        <p class="text-sm bg-purple-50 p-2 rounded">
+                            <strong>Gardening Tip:</strong> Excellent for root crops, bulbs, and transplanting. Focus on soil preparation.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sun Calendar View -->
+            <div id="sun-view" class="section hidden">
+                <div class="space-y-4">
+                    <div class="card bg-yellow-50 border-yellow-200">
+                        <h4 class="font-semibold text-yellow-800 mb-2">Today's Sun Information</h4>
+                        <div class="flex items-center space-x-3 mb-2">
+                            <span class="text-2xl">☀️</span>
+                            <span class="font-semibold" id="today-date"></span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 mb-2">
+                            <div>
+                                <span class="text-sm font-medium">Sunrise:</span>
+                                <p class="text-sm">7:15 AM</p>
+                            </div>
+                            <div>
+                                <span class="text-sm font-medium">Sunset:</span>
+                                <p class="text-sm">5:45 PM</p>
+                            </div>
+                            <div>
+                                <span class="text-sm font-medium">Day Length:</span>
+                                <p class="text-sm">10h 30m</p>
+                            </div>
+                        </div>
+                        <p class="text-sm bg-yellow-100 p-2 rounded">
+                            <strong>Today's Tip:</strong> Short days - focus on cool-season crops and indoor seed starting.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Almanac View -->
+            <div id="almanac-view" class="section hidden">
+                <div class="space-y-4">
+                    <div class="card">
+                        <div class="flex items-start space-x-3">
+                            <span class="text-2xl">🌱</span>
+                            <div>
+                                <p class="font-semibold text-gray-800 mb-2">Plant above-ground crops during waxing moon phases for better growth</p>
+                                <p class="text-sm text-gray-600">The waxing moon (new to full) is believed to pull moisture upward, promoting leaf and stem growth.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="flex items-start space-x-3">
+                            <span class="text-2xl">🥕</span>
+                            <div>
+                                <p class="font-semibold text-gray-800 mb-2">Plant root crops during waning moon phases for stronger root development</p>
+                                <p class="text-sm text-gray-600">The waning moon (full to new) is thought to pull energy downward, benefiting root growth.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Zone 10 Guide Section -->
+        <div id="guide" class="section hidden">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-florida-green mb-4">Florida Zone 10 Gardening Guide</h1>
+                <p class="text-xl text-gray-600">Everything you need to know about gardening in Florida's tropical climate</p>
+            </div>
+
+            <div class="card">
+                <h2 class="text-2xl font-bold text-florida-green mb-6">Zone 10 Climate Overview</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="text-4xl mb-3">🌡️</div>
+                        <h3 class="font-semibold text-gray-800 mb-1">Temperature Range</h3>
+                        <p class="text-lg font-bold text-florida-green mb-2">30-40°F minimum</p>
+                        <p class="text-sm text-gray-600">Winter temperatures</p>
+                    </div>
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="text-4xl mb-3">🌱</div>
+                        <h3 class="font-semibold text-gray-800 mb-1">Growing Season</h3>
+                        <p class="text-lg font-bold text-florida-green mb-2">Year-round</p>
+                        <p class="text-sm text-gray-600">Extended growing period</p>
+                    </div>
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="text-4xl mb-3">🌧️</div>
+                        <h3 class="font-semibold text-gray-800 mb-1">Annual Rainfall</h3>
+                        <p class="text-lg font-bold text-florida-green mb-2">50-60 inches</p>
+                        <p class="text-sm text-gray-600">Tropical rainfall patterns</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6 mt-8">
+                <div class="card">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">✅ Zone 10 Do's</h3>
+                    <ul class="space-y-2 text-gray-700">
+                        <li>• Plant year-round with seasonal adjustments</li>
+                        <li>• Use native and adapted plants</li>
+                        <li>• Practice crop rotation</li>
+                        <li>• Mulch heavily to retain moisture</li>
+                        <li>• Monitor for pests regularly</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">❌ Zone 10 Don'ts</h3>
+                    <ul class="space-y-2 text-gray-700">
+                        <li>• Don't plant frost-sensitive plants in winter</li>
+                        <li>• Avoid overwatering in rainy seasons</li>
+                        <li>• Don't ignore pest problems</li>
+                        <li>• Avoid planting in poorly drained areas</li>
+                        <li>• Don't use overhead sprinklers</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Plant data with real images
+        const plants = [
+            {
+                name: 'Bougainvillea',
+                category: 'shrubs',
+                description: 'A stunning tropical vine with vibrant bracts that come in pink, purple, orange, and white.',
+                image: 'https://images.unsplash.com/photo-1593691509543-c55fb32e5ceb?w=400&h=300&fit=crop',
+                sunExposure: 'Full sun',
+                waterNeeds: 'Moderate',
+                zone10Specific: 'Thrives in Florida heat and humidity, drought-tolerant once established'
+            },
+            {
+                name: 'Hibiscus',
+                category: 'flowers',
+                description: 'Tropical flowering shrub with large, colorful blooms. State flower of Hawaii.',
+                image: 'https://images.unsplash.com/photo-1593691509543-c55fb32e5ceb?w=400&h=300&fit=crop',
+                sunExposure: 'Full sun to partial shade',
+                waterNeeds: 'High',
+                zone10Specific: 'Loves Florida humidity, attracts hummingbirds and butterflies'
+            },
+            {
+                name: 'Tomato',
+                category: 'vegetables',
+                description: 'Popular garden vegetable with many varieties suitable for Zone 10. Plant in fall for best results.',
+                image: 'https://images.unsplash.com/photo-1546094096-0df4bcaaa337?w=400&h=300&fit=crop',
+                sunExposure: 'Full sun',
+                waterNeeds: 'Moderate',
+                zone10Specific: 'Plant September-March in Zone 10, avoid summer heat stress'
+            },
+            {
+                name: 'Basil',
+                category: 'herbs',
+                description: 'Aromatic herb perfect for Zone 10 gardens. Essential for Italian and Thai cooking.',
+                image: 'https://images.unsplash.com/photo-1618377382884-8fd508cb6d3a?w=400&h=300&fit=crop',
+                sunExposure: 'Full sun',
+                waterNeeds: 'Moderate',
+                zone10Specific: 'Grow year-round in Zone 10, plant near tomatoes for companion benefits'
+            },
+            {
+                name: 'Mango',
+                category: 'fruits',
+                description: 'Tropical fruit tree that thrives in Zone 10. Sweet, juicy fruits perfect for Florida gardens.',
+                image: 'https://images.unsplash.com/photo-1553279768-865429fa0078?w=400&h=300&fit=crop',
+                sunExposure: 'Full sun',
+                waterNeeds: 'Moderate',
+                zone10Specific: 'Perfect for Florida climate, plant in spring, harvest June-September'
+            },
+            {
+                name: 'Marigold',
+                category: 'flowers',
+                description: 'Hardy annual flowers that deter pests and add color to Zone 10 gardens.',
+                image: 'https://images.unsplash.com/photo-1593691509543-c55fb32e5ceb?w=400&h=300&fit=crop',
+                sunExposure: 'Full sun',
+                waterNeeds: 'Low',
+                zone10Specific: 'Excellent pest deterrent, plant around vegetables, heat tolerant'
+            }
+        ];
+
+        // Calendar variables
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+        let selectedDate = new Date();
+
+        // Navigation functionality
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Initialize calendar if showing calendar section
+            if (sectionId === 'calendar') {
+                initializeCalendar();
+            }
+        }
+
+        // Plant identification functionality
+        function identifyPlant() {
+            const resultsDiv = document.getElementById('results');
+            const resultsContent = document.getElementById('results-content');
+            
+            resultsContent.innerHTML = `
+                <div class="border border-gray-200 rounded-lg p-6">
+                    <div class="flex items-start space-x-4">
+                        <img src="https://images.unsplash.com/photo-1593691509543-c55fb32e5ceb?w=150&h=150&fit=crop" alt="Bougainvillea" class="w-24 h-24 object-cover rounded-lg">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <h3 class="text-lg font-semibold text-gray-800">Bougainvillea</h3>
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">85% match</span>
+                            </div>
+                            <p class="text-sm text-gray-600 italic mb-2">Bougainvillea spp.</p>
+                            <p class="text-gray-700 mb-4">A stunning tropical vine with vibrant bracts that come in pink, purple, orange, and white. Perfect for Zone 10 gardens.</p>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div><strong>Sun:</strong> Full sun</div>
+                                <div><strong>Water:</strong> Moderate</div>
+                                <div><strong>Care:</strong> Prune after flowering</div>
+                                <div><strong>Zone 10:</strong> Drought-tolerant once established</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            resultsDiv.classList.remove('hidden');
+        }
+
+        // Season selection functionality
+        function showSeason(season) {
+            document.querySelectorAll('.season-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update season content
+            const content = document.getElementById('season-content');
+            content.innerHTML = `<h3 class="text-lg font-semibold text-gray-800 mb-4">${season.charAt(0).toUpperCase() + season.slice(1)} Planting Guide</h3><p>Detailed planting information for ${season} season...</p>`;
+        }
+
+        // Plant database functionality
+        function populatePlants() {
+            const grid = document.getElementById('plants-grid');
+            grid.innerHTML = plants.map(plant => `
+                <div class="card">
+                    <img src="${plant.image}" alt="${plant.name}" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">${plant.name}</h3>
+                    <p class="text-gray-600 mb-2">${plant.description}</p>
+                    <div class="flex flex-wrap gap-2 mb-3">
+                        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">${plant.category}</span>
+                        <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">${plant.sunExposure}</span>
+                        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">${plant.waterNeeds}</span>
+                    </div>
+                    <p class="text-xs text-green-600"><strong>Zone 10:</strong> ${plant.zone10Specific}</p>
+                </div>
+            `).join('');
+        }
+
+        function filterPlants() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const categoryFilter = document.getElementById('category-filter').value;
+            
+            const filteredPlants = plants.filter(plant => {
+                const matchesSearch = plant.name.toLowerCase().includes(searchTerm) || 
+                                    plant.description.toLowerCase().includes(searchTerm);
+                const matchesCategory = categoryFilter === '' || plant.category === categoryFilter;
+                return matchesSearch && matchesCategory;
+            });
+            
+            const grid = document.getElementById('plants-grid');
+            grid.innerHTML = filteredPlants.map(plant => `
+                <div class="card">
+                    <img src="${plant.image}" alt="${plant.name}" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">${plant.name}</h3>
+                    <p class="text-gray-600 mb-2">${plant.description}</p>
+                    <div class="flex flex-wrap gap-2 mb-3">
+                        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">${plant.category}</span>
+                        <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">${plant.sunExposure}</span>
+                        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">${plant.waterNeeds}</span>
+                    </div>
+                    <p class="text-xs text-green-600"><strong>Zone 10:</strong> ${plant.zone10Specific}</p>
+                </div>
+            `).join('');
+        }
+
+        // Calendar functionality
+        function showCalendarView(view) {
+            // Hide all calendar views
+            document.getElementById('calendar-view').classList.add('hidden');
+            document.getElementById('moon-view').classList.add('hidden');
+            document.getElementById('sun-view').classList.add('hidden');
+            document.getElementById('almanac-view').classList.add('hidden');
+            
+            // Show selected view
+            document.getElementById(view + '-view').classList.remove('hidden');
+            
+            // Update tabs
+            document.querySelectorAll('.calendar-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update current date displays
+            if (view === 'moon') {
+                document.getElementById('current-date').textContent = new Date().toLocaleDateString();
+            }
+            if (view === 'sun') {
+                document.getElementById('today-date').textContent = new Date().toLocaleDateString();
+            }
+        }
+
+        function initializeCalendar() {
+            const monthNames = [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+
+            // Update calendar title
+            document.getElementById('calendar-title').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+
+            // Generate calendar days
+            generateCalendarDays();
+
+            // Update selected date info
+            updateSelectedDateInfo();
+        }
+
+        function generateCalendarDays() {
+            const daysContainer = document.getElementById('calendar-days');
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const today = new Date();
+
+            let daysHTML = '';
+
+            // Add empty cells for days before the first day of the month
+            for (let i = 0; i < firstDay; i++) {
+                daysHTML += '<div class="p-2 border border-gray-200 bg-gray-50"></div>';
+            }
+
+            // Add cells for each day of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(currentYear, currentMonth, day);
+                const isTodayClass = date.toDateString() === today.toDateString() ? 'today' : '';
+                const isSelectedClass = date.toDateString() === selectedDate.toDateString() ? 'selected' : '';
+                
+                daysHTML += `
+                    <div class="calendar-day ${isTodayClass} ${isSelectedClass}" onclick="selectDate(${day})">
+                        <div class="font-semibold text-sm mb-1">${day}</div>
+                        ${date.toDateString() === today.toDateString() ? '<div class="text-xs">Today</div>' : ''}
+                    </div>
+                `;
+            }
+
+            daysContainer.innerHTML = daysHTML;
+        }
+
+        function selectDate(day) {
+            selectedDate = new Date(currentYear, currentMonth, day);
+            generateCalendarDays();
+            updateSelectedDateInfo();
+        }
+
+        function navigateMonth(direction) {
+            if (direction === 'prev') {
+                if (currentMonth === 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                } else {
+                    currentMonth--;
+                }
+            } else {
+                if (currentMonth === 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                } else {
+                    currentMonth++;
+                }
+            }
+            initializeCalendar();
+        }
+
+        function updateSelectedDateInfo() {
+            const title = document.getElementById('selected-date-title');
+            const content = document.getElementById('selected-date-content');
+            const today = new Date();
+            const isToday = selectedDate.toDateString() === today.toDateString();
+
+            title.innerHTML = `
+                ${selectedDate.toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                })}
+                ${isToday ? '<span class="ml-2 bg-florida-green text-white px-2 py-1 rounded-full text-sm">Today</span>' : ''}
+            `;
+
+            // Add some sample content for the selected date
+            content.innerHTML = `
+                <div class="p-3 bg-gray-50 rounded-lg">
+                    <p class="text-sm text-gray-600">Click on any date to see detailed information about planting activities, moon phases, and gardening tips for that day.</p>
+                </div>
+            `;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            populatePlants();
+            
+            // Add calendar tab styles
+            const style = document.createElement('style');
+            style.textContent = `
+                .calendar-tab {
+                    @apply px-4 py-2 rounded-lg font-medium transition-colors bg-gray-200 text-gray-700 hover:bg-gray-300;
+                }
+                .calendar-tab.active {
+                    @apply bg-florida-green text-white;
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html> 
